@@ -38,9 +38,41 @@
     prepare
   ```
 
+- sysbenchでベンチマーク（read/write混合）を実行
+
+  ```sh
+  sysbench \
+    --db-driver=mysql \
+    --mysql-host=127.0.0.1 \
+    --mysql-port=3306 \
+    --mysql-user=testuser \
+    --mysql-password=testpass \
+    --mysql-db=testdb \
+    --tables=1 \
+    --table-size=1000000 \
+    oltp_read_write \
+    run
+  ```
+
+- MySQLでテーブルやレコード数を確認
+
+  ```sql
+  SHOW TABLES;
+  SELECT COUNT(*) FROM sbtest1;
+  ```
+
 ## ベンチマーク・検証結果
-- 100万レコードのテストデータ生成に成功（sbtest1テーブル）
-- 今後、sysbenchでベースライン計測を実施予定
+- sysbench oltp_read_write 実行結果
+  - transactions: 1495 (149.45/sec) … 1秒あたりのトランザクション数（QPSの目安）
+  - queries: 29900 (2988.91/sec) … 1秒あたりの総クエリ数（read/write/otherの合計）
+  - avg latency: 6.69ms … 1トランザクションあたりの平均応答時間
+  - total time: 10.0s … ベンチマーク全体の実行時間
+- 各項目の意味：
+  - transactions/sec（QPS）やlatencyはMySQLの基本性能指標。今後のチューニング効果比較に活用できる。
+  - queries performedはread/write/otherの内訳も確認できる。
+  - 95th percentile latencyは上位95%の応答時間の目安（今回は0.00だが通常は値が入る）。
+  - threads fairnessはスレッドごとの処理バランス（今回は1スレッドなのでstddev=0）。
+- 今後、スレッド数やワークロードを変えて再計測し、設定やインデックス最適化の効果を定量的に比較していく予定。
 
 ## 課題・疑問点
 - Grafanaでのダッシュボード作成・インポート手順を今後整理したい
