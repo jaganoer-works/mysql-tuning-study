@@ -62,17 +62,11 @@
   ```
 
 ## ベンチマーク・検証結果
-- sysbench oltp_read_write 実行結果
-  - transactions: 1495 (149.45/sec) … 1秒あたりのトランザクション数（QPSの目安）
-  - queries: 29900 (2988.91/sec) … 1秒あたりの総クエリ数（read/write/otherの合計）
-  - avg latency: 6.69ms … 1トランザクションあたりの平均応答時間
-  - total time: 10.0s … ベンチマーク全体の実行時間
-- 各項目の意味：
-  - transactions/sec（QPS）やlatencyはMySQLの基本性能指標。今後のチューニング効果比較に活用できる。
-  - queries performedはread/write/otherの内訳も確認できる。
-  - 95th percentile latencyは上位95%の応答時間の目安（今回は0.00だが通常は値が入る）。
-  - threads fairnessはスレッドごとの処理バランス（今回は1スレッドなのでstddev=0）。
-- 今後、スレッド数やワークロードを変えて再計測し、設定やインデックス最適化の効果を定量的に比較していく予定。
+- サービス（MySQL, Prometheus, Grafana）を再起動後、sysbenchでベンチマークを再実行
+  - transactions/sec, queries/sec, avg latency など、再起動前とほぼ同じ水準で安定
+  - 例：transactions: 1518 (151.74/sec), queries: 30360 (3034.79/sec), avg latency: 6.59ms
+- データや設定が保持されており、環境の再現性・安定性が高いことを確認
+- 今後のチューニングや検証もこの安定した基盤の上で進められる見通し
 
 ## 課題・疑問点
 - Grafanaでのダッシュボード作成・インポート手順を今後整理したい
