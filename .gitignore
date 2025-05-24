@@ -1,0 +1,21 @@
+# OS生成ファイル
+.DS_Store
+
+# MySQL永続化データ
+data/
+mysql_data/
+
+# 環境変数ファイル
+.env
+
+# ログ・キャッシュ・一時ファイル
+*.log
+*.cache
+tmp/
+
+# エディタ・IDE
+.idea/
+.vscode/
+
+# その他
+*.swp 
